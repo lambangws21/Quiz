@@ -1,0 +1,180 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,600;1,400;1,700&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+        box-sizing: border-box;
+      }
+      body {
+        background: #001e4d;
+      }
+      .app {
+        background-color: #fff;
+        width: 90%;
+        max-width: 600px;
+        margin: 100px auto 0;
+        border-radius: 10px;
+        padding: 30px;
+      }
+
+      .app h1 {
+        font-size: 25px;
+        color: #001e4d;
+        font-weight: 600;
+        border-bottom: 1px solid #333;
+        padding-bottom: 30px;
+      }
+      .quiz {
+        padding: 20px 0;
+      }
+      .quiz h2 {
+        font-size: 19px;
+        color: #001e4d;
+        font-weight: 600;
+      }
+
+      .btn {
+        background: #fff;
+        color: #222;
+        font-weight: 500;
+        width: 100%;
+        border: 1px solid #111;
+        text-align: center;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 10px;
+      }
+
+      .btn:hover {
+        background: #222;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <h1>Simple Quiz</h1>
+      <div class="quiz">
+        <h2 id="question">Quiz goes here</h2>
+        <div id="answer-buttons"></div>
+        <div id="nav-buttons">
+          <button id="prev-btn">Prev</button>
+          <button id="next-btn">Next</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      const questions = [
+        {
+          question: "Siapa nama Presiden Indonesia saat ini?",
+          answers: [
+            { text: "Bapak Satria", correct: false },
+            { text: "Bu Medi", correct: false },
+            { text: "Bapak Jokowi", correct: true },
+            { text: "Bapak Agus", correct: false },
+          ],
+        },
+        {
+          question: "Apa tempat kelahiran anak pertama?",
+          answers: [
+            { text: "Kuningan", correct: true },
+            { text: "Cirebon", correct: false },
+            { text: "Banyuwangi", correct: false },
+            { text: "Jakarta", correct: false },
+          ],
+        },
+        {
+          question: "Siapa nama Presiden Indonesia saat ini?",
+          answers: [
+            { text: "Bapak Satria", correct: false },
+            { text: "Bu Medi", correct: false },
+            { text: "Bapak Jokowi", correct: true },
+            { text: "Bapak Agus", correct: false },
+          ],
+        },
+      ];
+
+      const questionElement = document.getElementById("question");
+      const answerButtonsElement = document.getElementById("answer-buttons");
+      const nextButton = document.getElementById("next-btn");
+      const prevButton = document.getElementById("prev-btn");
+
+      let currentQuestionIndex = 0;
+      let score = 0;
+
+      function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        nextButton.innerHTML = "Next";
+        prevButton.style.display = "none";
+        showQuestion();
+      }
+
+      function showQuestion() {
+        let currentQuestion = questions[currentQuestionIndex];
+        let questionNo = currentQuestionIndex + 1;
+        questionElement.innerHTML =
+          questionNo + ". " + currentQuestion.question;
+        answerButtonsElement.innerHTML = "";
+        currentQuestion.answers.forEach((answer) => {
+          const btn = document.createElement("button");
+          btn.innerHTML = answer.text;
+          btn.classList.add("btn");
+          btn.addEventListener("click", () => {
+            if (answer.correct) {
+              score++;
+            }
+            nextQuestion();
+          });
+          answerButtonsElement.appendChild(btn);
+        });
+
+        prevButton.style.display =
+          currentQuestionIndex === 0 ? "none" : "inline";
+      }
+
+      function nextQuestion() {
+        const selectedAnswer = document.querySelector(
+          'input[name="answer"]:checked'
+        );
+
+        if (selectedAnswer) {
+          currentQuestionIndex++;
+          showQuestion();
+        } else {
+          alert("Please select an answer!");
+        }
+      }
+
+      function prevQuestion() {
+        currentQuestionIndex--;
+        showQuestion();
+      }
+
+      function finishQuiz() {
+        questionElement.innerHTML = "Quiz completed!";
+        answerButtonsElement.innerHTML =
+          "Your score: " + score + " out of " + questions.length;
+        nextButton.innerHTML = "Restart";
+        nextButton.addEventListener("click", startQuiz);
+      }
+
+      // Event listeners
+      nextButton.addEventListener("click", nextQuestion);
+      prevButton.addEventListener("click", prevQuestion);
+
+      // Start the quiz
+      startQuiz();
+    </script>
+  </body>
+</html>
